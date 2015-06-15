@@ -16,7 +16,7 @@ public class Variable
      public String type;
      public String name;
      private static final String VARIABLE_COMPONENTS =
-             "^\\s*(final)?\\s*(int|boolean|char|double|String)?\\s*([^;|^=]*)(=)?(.*;)"; //TODO: try to
+             "^\\s*(final)?\\s+(int|boolean|char|double|String)?\\s+([^;|^=]*)(=)?(.*;)"; //TODO: try to
                                                                                             // minimize this!
      private static final int GROUP_FINAL = 1;
      private static final int GROUP_TYPE = 2;
@@ -45,8 +45,6 @@ public class Variable
          Matcher getGroupsMatcher = getGroups.matcher(givenString);
          boolean search = getGroupsMatcher.find();
          if (getGroupsMatcher.group(GROUP_FINAL) != null){
-             System.out.println(getGroupsMatcher.group(GROUP_EQUAL));
-             System.out.println(getGroupsMatcher.group(GROUP_VALUE));
              if (getGroupsMatcher.group(GROUP_EQUAL) == null){
                  throw new invalidSyntax();
              }

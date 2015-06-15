@@ -2,7 +2,9 @@ package ex6;
 
 import ex6.exceptions.invalidSyntax;
 import ex6.variable.Variable;
+import ex6.variable.VariableFactory;
 
+import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,15 +15,10 @@ public class test {
 
 
     public static void main (String[] args) throws invalidSyntax {
-//        String a = "fal";
-//        Variable myVar = new Variable(a);
-//
-//        System.out.println(myVar.type);
-//        System.out.println(myVar.name);
-//        System.out.println(myVar.isFinal);
-
-        String f,b,c = "1","wall";
-        System.out.println(c);
-        System.out.println(b);
+        Hashtable<String, Variable> testing = new Hashtable<>();
+        String line = "     int sean =    ,5,a,b    =   5,;";
+        testing = VariableFactory.createVariables(line, testing);
+        System.out.println(testing.get("sean").type);
+        System.out.println(testing.get("a").type);
     }
 }
