@@ -14,21 +14,12 @@ public class test {
 
 
     public static void main (String[] args) throws invalidSyntax {
-        Pattern pat = Pattern.compile("^\\s*(final)?\\s*(int)?");
-        String var = "   final   int    sean      =;    ";
-        Variable myVar = new Variable(var);
+        String a = "fal";
+        Variable myVar = new Variable(a);
 
-//        Matcher mac = pat.matcher(var);
-//        System.out.println(mac.find());
-//        System.out.println(mac.group(1));
+        System.out.println(myVar.type);
+        System.out.println(myVar.name);
+        System.out.println(myVar.isFinal);
 
-//        boolean a,b,c=true;
-//        System.out.println(a);
-//        System.out.println(b);
-//        System.out.println(c);
-//        System.out.println(mac.group(1));
-//        int isFinal = VariableBuilder.isFinal(var);
-//        System.out.println(isFinal);
-//        System.out.println(var.substring(isFinal));
     }
 }

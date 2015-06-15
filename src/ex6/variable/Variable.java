@@ -12,50 +12,52 @@ public class Variable
  {
 
 //     public static final int NOT_FINAL = -1;
-     private boolean isFinal = false;
-     private String type;
-     private String name;
-     private String value;
+     public boolean isFinal = false;
+     public String type;
+     public String name;
      private static final String VARIABLE_COMPONENTS =
-             "^\\s*(final)?\\s*(int|boolean|char|double|String)?\\s*([^;|^=]*)(=)?([\\w\\s]*;)";
+             "^\\s*(final)?\\s*(int|boolean|char|double|String)?\\s*([^;|^=]*)(=)?(.*;)"; //TODO: try to
+                                                                                            // minimize this!
      private static final int GROUP_FINAL = 1;
      private static final int GROUP_TYPE = 2;
      private static final int GROUP_NAME = 3;
      private static final int GROUP_EQUAL = 4;
      private static final int GROUP_VALUE = 5;
      private static final String INVALID_NAME = "\\b_\\b|^\\d|[^\\w]|\\s";
-     private static final String EMPTY_VALUE = "\\s*;";
-     private static final String INVALID_INT = "[^\\d]";
-     private static final String INVALID_DOUBLE = "[^\\d*\\.?\\d*]";
+     private static final String EMPTY_VALUE = "^;";
+     private static final String VALID_INT = "^(-?)(\\d)+$"; //TODO change this!
+     private static final String VALID_DOUBLE = "^(-?)([0-9]+)(\\.[0-9]+)*$";
+     private static final String VALID_CHAR = "^'.'$";
+     private static final String VALID_STRING = "^\".*\"$";
+     private static final String VALID_BOOLEAN = "^true$|^false$|^\\d+\\.?\\d*$";
+     private static final String STRING_TYPE = "String";
+     private static final String INT_TYPE = "int";
+     private static final String CHAR_TYPE = "char";
+     private static final String DOUBLE_TYPE = "double";
+     private static final String BOOLEAN = "boolean";
+
 
 
 
 
      public Variable(String givenString) throws invalidSyntax {
-        //TODO: check variable validity
-//        description = givenString;
-//        int isFinalCheck = VariableBuilder.isFinal(givenString);
-//        if (!(isFinalCheck == NOT_FINAL)){
-//            isFinal = true;
-//            givenString = givenString.substring(isFinalCheck);
-//        }
-//        givenString.trim();
-        //get type
-        // get name or names
-        // equal sign or not?
          Pattern getGroups = Pattern.compile(VARIABLE_COMPONENTS);
          Matcher getGroupsMatcher = getGroups.matcher(givenString);
-         getGroupsMatcher.find();
+         boolean search = getGroupsMatcher.find();
          if (getGroupsMatcher.group(GROUP_FINAL) != null){
-             if (getGroupsMatcher.group(GROUP_VALUE) == null){
+             System.out.println(getGroupsMatcher.group(GROUP_EQUAL));
+             System.out.println(getGroupsMatcher.group(GROUP_VALUE));
+             if (getGroupsMatcher.group(GROUP_EQUAL) == null){
                  throw new invalidSyntax();
              }
              isFinal = true;
          }
-
          type = getGroupsMatcher.group(GROUP_TYPE);
          name = nameCheck(getGroupsMatcher.group(GROUP_NAME));
-         System.out.println(getGroupsMatcher.group(GROUP_VALUE));
+         //if there is an equal sign
+         if (getGroupsMatcher.group(GROUP_EQUAL) != null){
+            valueCheck(getGroupsMatcher.group(GROUP_VALUE), type);
+         }
     }
 
 
@@ -69,36 +71,44 @@ public class Variable
          else return name;
      }
 
-     private String valueCheck(String givenString, String type) throws invalidSyntax {
-         String name = givenString;
-         Pattern emptyValue = Pattern.compile(EMPTY_VALUE);
-         Matcher emptyValueMatcher = emptyValue.matcher(name);
-         //if the value group doesn't contain any value, throw an exception
-         if (emptyValueMatcher.find()) {
-             throw new invalidSyntax();
-         }
-         name.trim();
-         int nameL = name.length();
-         name = name.substring(0,nameL-2);
-
-
+     private void valueCheck(String givenString, String type) throws invalidSyntax {
+         String value = givenString;
+         value = value.trim();
+         emptyValueCheck(value, EMPTY_VALUE);
+         value = value.substring(0,value.length()-1);
+        if (type.equals(INT_TYPE)){
+            valueValidityCheck(value, VALID_INT);
+        }
+         else if (type.equals(DOUBLE_TYPE)){
+            valueValidityCheck(value, VALID_DOUBLE);
+        }
+         else if (type.equals(CHAR_TYPE)){
+            valueValidityCheck(value, VALID_CHAR);
+        }
+         else if (type.equals(STRING_TYPE)){
+            valueValidityCheck(value, VALID_STRING);
+        }
+         else if (type.equals(BOOLEAN)){
+            valueValidityCheck(value, VALID_BOOLEAN);
+        }
      }
 
-     private void intValueCheck (String givenString) throws invalidSyntax { //TODO code repetition!!!
-         Pattern valueCheck = Pattern.compile(INVALID_INT);
-         Matcher valueCheckMatcher = valueCheck.matcher(givenString);
-         if (valueCheckMatcher.find()) {
+     private void valueValidityCheck(String givenString, String validValue) throws invalidSyntax {
+         Pattern valueCheck = Pattern.compile(validValue);
+         Matcher valueCheackMatcher = valueCheck.matcher(givenString);
+         boolean search = valueCheackMatcher.find();
+         if (!search) {
              throw new invalidSyntax();
          }
      }
 
-     private void doubleCheck (String givenString) throws invalidSyntax { //TODO code repetition!!!
-        Pattern valueCheck = Pattern.compile(INVALID_DOUBLE);
-         Matcher valueCheckMatcher = valueCheck.matcher(givenString);
-         if (valueCheckMatcher.find()){
+     private void emptyValueCheck(String givenString,String emptyValueRegex) throws invalidSyntax {
+         Pattern valueCheck = Pattern.compile(emptyValueRegex);
+         Matcher valueCheackMatcher = valueCheck.matcher(givenString);
+         boolean search = valueCheackMatcher.find();
+         if (search){
              throw new invalidSyntax();
          }
      }
 
-
-}
+ }
