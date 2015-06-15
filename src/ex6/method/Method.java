@@ -14,8 +14,13 @@ public class Method
 
     ArrayList<Block> myBlocks = new ArrayList<>();
     ArrayList<Variable> initialParam = new ArrayList<>();
+    ArrayList<Variable> variables = new ArrayList<>();
+    public int start;
+    public int end;
 
 
-    public void method(String[] givenStrings){
+    public Method (int startIndex, int endIndex){
+        start = startIndex;
+        end = endIndex;
     }
 }

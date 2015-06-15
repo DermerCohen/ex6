@@ -30,14 +30,17 @@ public class ComponentsParser {
     private final static int TYPE_VAR_MODE = 3;
     private final static int METHOD_PARAM = 3;
     private final static int METHOD_NAME = 2;
+    private final static int UNBALANCED_CODE = -1;
 
     private final static String INT = "int";
     private final static String DOUBLE = "double";
     private final static String STRING = "String";
     private final static String BOOLEAN = "boolean";
     private final static String CHAR = "char";
+    private int lineCounter = 0;
 
     public void createExpressions (ArrayList<String> lines) throws invalidSyntax {
+        BlockSlice slicer = new BlockSlice();
         MainBlock mainBlock = new MainBlock();
         VariableChecks varChecker = new VariableChecks();
         MethodChecks methodChecker = new MethodChecks();
@@ -49,6 +52,7 @@ public class ComponentsParser {
         Pattern varModPattern = Pattern.compile(VAR_MOD);
         for (int i=0 ; i<lines.size(); i++){
             String curLine = lines.get(i);
+            lineCounter++;
             Matcher methodBeginMatcher = methodBeginPattern.matcher(curLine);
             Matcher commentMatcher = commentPattern.matcher(curLine);
             Matcher emptyLineMatcher = emptyLinePattern.matcher(curLine);
@@ -64,11 +68,19 @@ public class ComponentsParser {
                         VariableFactory.createVariables(curLine,mainBlock.variables);
             }
 
-            else if (methodBeginMatcher.matches()){
+            else if (methodBeginMatcher.matches()) {
                 String methodName = methodBeginMatcher.group(METHOD_NAME);
-                if (!mainBlock.methods.containsKey(methodName)){
+                if (!mainBlock.methods.containsKey(methodName)) {
                     String inputParam = methodBeginMatcher.group(METHOD_PARAM);
                     methodChecker.methodParamValidityCheck(inputParam);//TODO missing the part of adding the param to method
+                    int endOfMethod = slicer.findMethodEnd(lines,lineCounter);
+                    if (endOfMethod == UNBALANCED_CODE){
+                        throw new invalidSyntax();
+                    }
+                    Method newMethod = new Method(lineCounter,endOfMethod);
+                    lineCounter = endOfMethod;
+                    mainBlock.methods.put(methodName,newMethod);
+                }
             }
 
             else if (varModMatcher.matches()){
