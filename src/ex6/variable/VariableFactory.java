@@ -43,6 +43,7 @@ public class VariableFactory {
         }
     }
 
+
     private static String[] valueTranslator(String givenString) throws invalidSyntax {
         // look for commas in the edges
         Pattern commasCheck = Pattern.compile(COMMAS_EDGES);
