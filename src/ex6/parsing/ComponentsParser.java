@@ -14,11 +14,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by amircohen on 6/14/15.
+ *
  */
 public class ComponentsParser {
 
-    private final static String METHOD_BEGIN = "^\\s*void.*\\{$";
+    private final static String METHOD_BEGIN = "^\\s*void\\s+.*\\{$";
     private final static String COMMENT = "^\\s*[/]{2}";
     private final static String EMPTY_LINE = "^\\s*$";
     private final static String VARIABLE = "^\\s*(final )?\\s*(int |boolean |String |char ).*;";
@@ -30,8 +30,6 @@ public class ComponentsParser {
     private final static String STRING = "String";
     private final static String BOOLEAN = "boolean";
     private final static String CHAR = "char";
-
-
 
     public void createExpressions (ArrayList<String> lines) throws invalidSyntax {
         MainBlock mainBlock = new MainBlock();
@@ -65,7 +63,7 @@ public class ComponentsParser {
             else if (varModMatcher.matches()){
                 String name = varModMatcher.group(NAME_VAR_MODE);
                 String type = varModMatcher.group(TYPE_VAR_MODE);
-                if (mainBlock.variables.contains(name)){
+                if (mainBlock.variables.containsKey(name)){
                     boolean origFinal = mainBlock.variables.get(name).isFinal;
                     if (!origFinal) {
                         String typeOrig = mainBlock.variables.get(name).type;
@@ -89,5 +87,3 @@ public class ComponentsParser {
 
         }
     }
-
-
