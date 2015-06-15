@@ -9,7 +9,6 @@ import java.util.Hashtable;
 /**
  * Created by dermersean on 15/06/2015.
  */
-public class MainBlock {
-    public Hashtable<String,Variable> variables = new Hashtable<>();
+public class MainBlock implements Block {
     public Hashtable<String,Method> methods = new Hashtable<>();
 }
