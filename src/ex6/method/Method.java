@@ -15,6 +15,7 @@ public class Method
     ArrayList<Block> myBlocks = new ArrayList<>();
     ArrayList<Variable> initialParam = new ArrayList<>();
 
+
     public void method(String[] givenStrings){
     }
 }
