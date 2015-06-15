@@ -13,6 +13,7 @@ public class Method
 
     ArrayList<Block> myBlocks = new ArrayList<>();
 
+
     public void method(String[] givenStrings){
     }
 }
