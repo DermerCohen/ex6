@@ -25,11 +25,11 @@ public class Variable
      private static final int GROUP_VALUE = 5;
      private static final String INVALID_NAME = "\\b_\\b|^\\d|[^\\w]|\\s";
      private static final String EMPTY_VALUE = "^;";
-     private static final String VALID_INT = "^(-?)(\\d)+$"; //TODO change this!
-     private static final String VALID_DOUBLE = "^(-?)([0-9]+)(\\.[0-9]+)*$";
-     private static final String VALID_CHAR = "^'.'$";
-     private static final String VALID_STRING = "^\".*\"$";
-     private static final String VALID_BOOLEAN = "^true$|^false$|^\\d+\\.?\\d*$";
+//     private static final String VALID_INT = "^(-?)(\\d)+$"; //TODO change this!
+//     private static final String VALID_DOUBLE = "^(-?)([0-9]+)(\\.[0-9]+)*$";
+//     private static final String VALID_CHAR = "^'.'$";
+//     private static final String VALID_STRING = "^\".*\"$";
+//     private static final String VALID_BOOLEAN = "^true$|^false$|^\\d+\\.?\\d*$";
      private static final String STRING_TYPE = "String";
      private static final String INT_TYPE = "int";
      private static final String CHAR_TYPE = "char";
@@ -77,30 +77,30 @@ public class Variable
          emptyValueCheck(value, EMPTY_VALUE);
          value = value.substring(0,value.length()-1);
         if (type.equals(INT_TYPE)){
-            valueValidityCheck(value, VALID_INT);
+            VariableChecks.valueValidityCheck(value, VariableChecks.VALID_INT);
         }
          else if (type.equals(DOUBLE_TYPE)){
-            valueValidityCheck(value, VALID_DOUBLE);
+            VariableChecks.valueValidityCheck(value, VariableChecks.VALID_DOUBLE);
         }
          else if (type.equals(CHAR_TYPE)){
-            valueValidityCheck(value, VALID_CHAR);
+            VariableChecks.valueValidityCheck(value, VariableChecks.VALID_CHAR);
         }
          else if (type.equals(STRING_TYPE)){
-            valueValidityCheck(value, VALID_STRING);
+            VariableChecks.valueValidityCheck(value, VariableChecks.VALID_STRING);
         }
          else if (type.equals(BOOLEAN)){
-            valueValidityCheck(value, VALID_BOOLEAN);
+            VariableChecks.valueValidityCheck(value, VariableChecks.VALID_BOOLEAN);
         }
      }
 
-     private void valueValidityCheck(String givenString, String validValue) throws invalidSyntax {
-         Pattern valueCheck = Pattern.compile(validValue);
-         Matcher valueCheackMatcher = valueCheck.matcher(givenString);
-         boolean search = valueCheackMatcher.find();
-         if (!search) {
-             throw new invalidSyntax();
-         }
-     }
+//     private void valueValidityCheck(String givenString, String validValue) throws invalidSyntax {
+//         Pattern valueCheck = Pattern.compile(validValue);
+//         Matcher valueCheackMatcher = valueCheck.matcher(givenString);
+//         boolean search = valueCheackMatcher.find();
+//         if (!search) {
+//             throw new invalidSyntax();
+//         }
+//     }
 
      private void emptyValueCheck(String givenString,String emptyValueRegex) throws invalidSyntax {
          Pattern valueCheck = Pattern.compile(emptyValueRegex);

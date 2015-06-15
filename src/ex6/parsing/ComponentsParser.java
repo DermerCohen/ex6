@@ -40,7 +40,7 @@ public class ComponentsParser {
             }
 
             else if (variableMatcher.matches() || varModMatcher.matches()){
-//                sjavac.variables.add(new Variable(curLine));
+//                 sjavac.variables.add(new Variable(curLine));
             }
 
             else if (methodBeginMatcher.matches()){
