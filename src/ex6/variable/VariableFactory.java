@@ -11,7 +11,6 @@ import ex6.exceptions.*;
  * Created by amircohen on 6/15/15.
  */
 public class VariableFactory {
-
     private static final String COMPONENTS =
             "^\\s*(final)?\\s*(int|boolean|char|double|String)?\\s*(.*);$";//TODO code repetition?? with variable constructor
     private static final int GROUP_FINAL = 1;//TODO code repetition?? with variable constructor
