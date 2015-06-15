@@ -1,7 +1,7 @@
 package ex6.method;
 
 import ex6.variable.Variable;
-import sun.jvm.hotspot.opto.Block;
+import ex6.blocks.MainBlock;
 
 import java.util.ArrayList;
 
@@ -11,9 +11,8 @@ import java.util.ArrayList;
 public class Method
 
 {
-
-    ArrayList<Block> myBlocks = new ArrayList<>();
-    ArrayList<Variable> initialParam = new ArrayList<>();
+    ArrayList<MainBlock> myBlocks = new ArrayList<>();
+    public ArrayList<Variable> initialParam = new ArrayList<>();
     ArrayList<Variable> variables = new ArrayList<>();
     public int start;
     public int end;
@@ -22,5 +21,6 @@ public class Method
     public Method (int startIndex, int endIndex){
         start = startIndex;
         end = endIndex;
+
     }
 }

@@ -37,9 +37,9 @@ public class ComponentsParser {
     private final static String STRING = "String";
     private final static String BOOLEAN = "boolean";
     private final static String CHAR = "char";
-    private int lineCounter = 0;
 
-    public void createExpressions (ArrayList<String> lines) throws invalidSyntax {
+    public static void createExpressions (ArrayList<String> lines) throws invalidSyntax {
+        int lineCounter = 0;
         BlockSlice slicer = new BlockSlice();
         MainBlock mainBlock = new MainBlock();
         VariableChecks varChecker = new VariableChecks();
@@ -72,12 +72,14 @@ public class ComponentsParser {
                 String methodName = methodBeginMatcher.group(METHOD_NAME);
                 if (!mainBlock.methods.containsKey(methodName)) {
                     String inputParam = methodBeginMatcher.group(METHOD_PARAM);
-                    methodChecker.methodParamValidityCheck(inputParam);//TODO missing the part of adding the param to method
+                    ArrayList<Variable> varList = new ArrayList<>();
+                    varList = methodChecker.methodParamValidityCheck(inputParam);//TODO missing the part of adding the param to method
                     int endOfMethod = slicer.findMethodEnd(lines,lineCounter);
                     if (endOfMethod == UNBALANCED_CODE){
                         throw new invalidSyntax();
                     }
                     Method newMethod = new Method(lineCounter,endOfMethod);
+                    newMethod.initialParam = varList;
                     lineCounter = endOfMethod;
                     mainBlock.methods.put(methodName,newMethod);
                 }
