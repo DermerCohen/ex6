@@ -1,5 +1,6 @@
 package ex6.parsing;
 
+import ex6.blocks.MainBlock;
 import ex6.manager.sjavac;
 import ex6.method.Method;
 import ex6.variable.Variable;
@@ -19,9 +20,12 @@ public class ComponentsParser {
     private final static String COMMENT = "^\\s*[/]{2}";
     private final static String EMPTY_LINE = "^\\s*$";
     private final static String VARIABLE = "^\\s*(final )?\\s*(int |boolean |String |char ).*;";
-    private final static String VAR_MOD = "^\\s*\\w+\\s*=\\s*.+\\s*;";
+    private final static String VAR_MOD = "^\\s*(\\w+)\\s*(=)\\s*(.+)(;)$";
+    private final static int NAME_VAR_MODE = 1;
+
 
     public void createExpressions (ArrayList<String> lines){
+        MainBlock mainBlock = new MainBlock();
         Pattern methodBeginPattern = Pattern.compile(METHOD_BEGIN);
         Pattern commentPattern = Pattern.compile(COMMENT);
         Pattern emptyLinePattern = Pattern.compile(EMPTY_LINE);
@@ -40,11 +44,18 @@ public class ComponentsParser {
             }
 
             else if (variableMatcher.matches() || varModMatcher.matches()){
-//                 sjavac.variables.add(new Variable(curLine));
+//                mainBlock.variables.a
             }
 
             else if (methodBeginMatcher.matches()){
 //                sjavac.methods.add(new Method());
+            }
+
+            else if (varModMatcher.matches()){
+                String name = varModMatcher.group(NAME_VAR_MODE);
+                if (mainBlock.variables.contains(name)){
+                    String typeOrig = mainBlock.variables.get(name).type;
+                }
             }
 
         }
