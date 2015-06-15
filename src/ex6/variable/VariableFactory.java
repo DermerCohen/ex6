@@ -38,7 +38,6 @@ public class VariableFactory {
         // now create all the variables!
         for (String variable : variables){
             String toTheConstructor = finalValue+BACK_SPACE+type+BACK_SPACE+variable+END_OF_VAR;
-            System.out.println(toTheConstructor);
             Variable newVariable = new Variable(toTheConstructor);
             boolean checking = finalTable.containsKey(newVariable.name);
             if (finalTable.containsKey(newVariable.name)){

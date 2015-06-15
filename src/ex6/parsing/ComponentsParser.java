@@ -4,8 +4,10 @@ import ex6.blocks.MainBlock;
 import ex6.exceptions.invalidSyntax;
 import ex6.manager.sjavac;
 import ex6.method.Method;
+import ex6.method.MethodChecks;
 import ex6.variable.Variable;
 import ex6.variable.VariableChecks;
+import ex6.variable.VariableFactory;
 import org.omg.Dynamic.Parameter;
 
 import java.lang.reflect.Array;
@@ -18,13 +20,17 @@ import java.util.regex.Pattern;
  */
 public class ComponentsParser {
 
-    private final static String METHOD_BEGIN = "^\\s*void\\s+.*\\{$";
+    private final static String METHOD_BEGIN =
+            "^\\s*(void)\\s+([a-zA-Z]{1}\\w*)\\s*(\\(.*\\))(\\{)$";
     private final static String COMMENT = "^\\s*[/]{2}";
     private final static String EMPTY_LINE = "^\\s*$";
     private final static String VARIABLE = "^\\s*(final )?\\s*(int |boolean |String |char ).*;";
     private final static String VAR_MOD = "^\\s*(\\w+)\\s*(=)\\s*(.+)(;)$";
     private final static int NAME_VAR_MODE = 1;
     private final static int TYPE_VAR_MODE = 3;
+    private final static int METHOD_PARAM = 3;
+    private final static int METHOD_NAME = 2;
+
     private final static String INT = "int";
     private final static String DOUBLE = "double";
     private final static String STRING = "String";
@@ -33,7 +39,8 @@ public class ComponentsParser {
 
     public void createExpressions (ArrayList<String> lines) throws invalidSyntax {
         MainBlock mainBlock = new MainBlock();
-        VariableChecks checker = new VariableChecks();
+        VariableChecks varChecker = new VariableChecks();
+        MethodChecks methodChecker = new MethodChecks();
 
         Pattern methodBeginPattern = Pattern.compile(METHOD_BEGIN);
         Pattern commentPattern = Pattern.compile(COMMENT);
@@ -52,31 +59,35 @@ public class ComponentsParser {
                 continue;
             }
 
-            else if (variableMatcher.matches() || varModMatcher.matches()){
-//                mainBlock.variables.a
+            else if (variableMatcher.matches()){
+                mainBlock.variables =
+                        VariableFactory.createVariables(curLine,mainBlock.variables);
             }
 
             else if (methodBeginMatcher.matches()){
-//                sjavac.methods.add(new Method());
+                String methodName = methodBeginMatcher.group(METHOD_NAME);
+                if (!mainBlock.methods.containsKey(methodName)){
+                    String inputParam = methodBeginMatcher.group(METHOD_PARAM);
+                    methodChecker.methodParamValidityCheck(inputParam);//TODO missing the part of adding the param to method
             }
 
             else if (varModMatcher.matches()){
-                String name = varModMatcher.group(NAME_VAR_MODE);
+                String varName = varModMatcher.group(NAME_VAR_MODE);
                 String type = varModMatcher.group(TYPE_VAR_MODE);
-                if (mainBlock.variables.containsKey(name)){
-                    boolean origFinal = mainBlock.variables.get(name).isFinal;
+                if (mainBlock.variables.containsKey(varName)){
+                    boolean origFinal = mainBlock.variables.get(varName).isFinal;
                     if (!origFinal) {
-                        String typeOrig = mainBlock.variables.get(name).type;
+                        String typeOrig = mainBlock.variables.get(varName).type;
                         if (typeOrig.equals(INT))
-                            checker.valueValidityCheck(type, checker.VALID_INT);
+                            varChecker.valueValidityCheck(type, varChecker.VALID_INT);
                         else if (typeOrig.equals(STRING))
-                            checker.valueValidityCheck(type, checker.VALID_STRING);
+                            varChecker.valueValidityCheck(type, varChecker.VALID_STRING);
                         else if (typeOrig.equals(BOOLEAN))
-                            checker.valueValidityCheck(type, checker.VALID_BOOLEAN);
+                            varChecker.valueValidityCheck(type, varChecker.VALID_BOOLEAN);
                         else if (typeOrig.equals(CHAR))
-                            checker.valueValidityCheck(type, checker.VALID_CHAR);
+                            varChecker.valueValidityCheck(type, varChecker.VALID_CHAR);
                         else if (typeOrig.equals(DOUBLE))
-                            checker.valueValidityCheck(type, checker.VALID_DOUBLE);
+                            varChecker.valueValidityCheck(type, varChecker.VALID_DOUBLE);
                         else throw new invalidSyntax();
                     }
                     else throw new invalidSyntax();

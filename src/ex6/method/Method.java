@@ -1,5 +1,6 @@
 package ex6.method;
 
+import ex6.variable.Variable;
 import sun.jvm.hotspot.opto.Block;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class Method
 {
 
     ArrayList<Block> myBlocks = new ArrayList<>();
+    ArrayList<Variable> initialParam = new ArrayList<>();
 
     public void method(String[] givenStrings){
     }

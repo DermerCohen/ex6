@@ -8,6 +8,6 @@ import java.util.Hashtable;
  * Created by amircohen on 6/15/15.
  */
 interface Block{
-    public Hashtable<String,Variable> variables = new Hashtable<>();
+//     Hashtable<String,Variable> variables = new Hashtable<String,Variable>();
 
 }
