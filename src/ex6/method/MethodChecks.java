@@ -12,12 +12,13 @@ import java.util.regex.Pattern;
  */
 public class MethodChecks {
     private static final String COMMAS_EDGES = "^,|,$";//TODO code repetition?? with factory
+    private static final String END_LINE = ";";
 
     public static void methodParamValidityCheck(String givenString) throws invalidSyntax {
         String name = givenString.substring(1,givenString.length()-1);
         String [] params = valueTranslator(name);
         for (String value: params){
-            Variable var = new Variable(value);
+            Variable var = new Variable(value+END_LINE);
         }
         }
 
