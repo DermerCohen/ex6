@@ -16,7 +16,7 @@ public class Variable
      public String type;
      public String name;
      private static final String VARIABLE_COMPONENTS =
-             "^\\s*(final)?\\s+(int|boolean|char|double|String)?\\s+([^;|^=]*)(=)?(.*;)"; //TODO: try to
+             "^\\s*(final )?\\s*(int|boolean|char|double|String)?\\s+([^;|^=]*)(=)?(.*;)"; //TODO: try to
                                                                                             // minimize this!
      private static final int GROUP_FINAL = 1;
      private static final int GROUP_TYPE = 2;
@@ -40,7 +40,7 @@ public class Variable
 
 
 
-     public Variable(String givenString) throws invalidSyntax {
+     public Variable(boolean dontCheckValue, String givenString) throws invalidSyntax {
          Pattern getGroups = Pattern.compile(VARIABLE_COMPONENTS);
          Matcher getGroupsMatcher = getGroups.matcher(givenString);
          boolean search = getGroupsMatcher.find();
@@ -53,7 +53,7 @@ public class Variable
          type = getGroupsMatcher.group(GROUP_TYPE);
          name = nameCheck(getGroupsMatcher.group(GROUP_NAME));
          //if there is an equal sign
-         if (getGroupsMatcher.group(GROUP_EQUAL) != null){
+         if (getGroupsMatcher.group(GROUP_EQUAL) != null && !dontCheckValue){
             valueCheck(getGroupsMatcher.group(GROUP_VALUE), type);
          }
     }

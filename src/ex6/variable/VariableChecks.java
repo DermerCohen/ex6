@@ -17,6 +17,7 @@ public class VariableChecks {
     public static final String VALID_BOOLEAN = "^true$|^false$|^\\d+\\.?\\d*$";
 
     public static void valueValidityCheck(String givenString, String validValue) throws invalidSyntax {
+        givenString = givenString.trim();
         Pattern valueCheck = Pattern.compile(validValue);
         Matcher valueCheackMatcher = valueCheck.matcher(givenString);
         boolean search = valueCheackMatcher.find();

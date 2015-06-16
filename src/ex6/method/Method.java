@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Method
 
 {
+
     ArrayList<MainBlock> myBlocks = new ArrayList<>();
     public ArrayList<Variable> initialParam = new ArrayList<>();
     ArrayList<Variable> variables = new ArrayList<>();

@@ -14,13 +14,22 @@ import java.util.regex.Pattern;
 public class MethodChecks {
     private static final String COMMAS_EDGES = "^,|,$";//TODO code repetition?? with factory
     private static final String END_LINE = ";";
+    private static final String EMPTY_PARAMETER = "^\\s*$";
+
 
     public static ArrayList<Variable> methodParamValidityCheck(String givenString) throws invalidSyntax {
-        String name = givenString.substring(1,givenString.length()-1);
-        String [] params = valueTranslator(name);
         ArrayList<Variable> varList = new ArrayList<>();
+
+        String name = givenString.substring(1,givenString.length()-1);
+        Pattern empty = Pattern.compile(EMPTY_PARAMETER);
+        Matcher emptyParam = empty.matcher(name);
+        boolean search = emptyParam.find();
+        if (search){
+            return varList;
+        }
+        String [] params = valueTranslator(name);
         for (String value: params){
-            Variable var = new Variable(value+END_LINE);
+            Variable var = new Variable(true,value+END_LINE);
             varList.add(var);
         }
         return varList;
