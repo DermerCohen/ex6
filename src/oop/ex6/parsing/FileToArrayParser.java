@@ -12,9 +12,10 @@ import java.util.Scanner;
 public class FileToArrayParser {
 
     /**
-     * This method gets an array
-     * @param fileDirectory
-     * @return
+     * This method gets the directory of the code file and translate the code into an array of strings
+     * every cell in the array contains a line from the code.
+     * @param fileDirectory the directory of the code file
+     * @return an ArrayList of strings, each string is a line in the code
      * @throws FileNotFoundException
      */
     public static ArrayList<String> convertFileToArray(String fileDirectory) throws FileNotFoundException
