@@ -185,7 +185,7 @@ public class ComponentsParser {
                             if (!possibleExistingVars.isEmpty()) {
                                 for (Variable possibleVar : possibleExistingVars){
                                     boolean findVar = VariableFactory.possiblePairs(possibleVar.type,BOOLEAN);
-                                    if (findVar == false){
+                                    if (findVar == false || possibleVar.initialized == false){
                                         throw new invalidSyntax();
                                     }
                                 }
@@ -234,10 +234,13 @@ public class ComponentsParser {
             BasicBlock curBlock = block;
             givenString = givenString.trim();
             while (curBlock != null) {
-               if ( block.variables.containsKey(givenString)){
-                   String type = block.variables.get(givenString).type;
+               if ( curBlock.variables.containsKey(givenString)){
+                   Variable foundVar = block.variables.get(givenString);
+                   String type = foundVar.type;
                    if (VariableFactory.possiblePairs(type,givenType)) {
-                       return true;
+                       if (foundVar.initialized == true){
+                           return true;
+                       }
                    }else {
                        curBlock = curBlock.parent;
                    }
