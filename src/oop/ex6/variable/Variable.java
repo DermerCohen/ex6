@@ -1,9 +1,13 @@
-package ex6.variable;
+package oop.ex6.variable;
 
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import ex6.exceptions.*;
+
+import oop.ex6.blocks.BasicBlock;
+import oop.ex6.exceptions.*;
+import oop.ex6.parsing.ComponentsParser;
 
 /**
  *
@@ -12,6 +16,7 @@ public class Variable
  {
 
 //     public static final int NOT_FINAL = -1;
+     public boolean initialized = false;
      public boolean isFinal = false;
      public String type;
      public String name;
@@ -25,11 +30,6 @@ public class Variable
      private static final int GROUP_VALUE = 5;
      private static final String INVALID_NAME = "\\b_\\b|^\\d|[^\\w]|\\s";
      private static final String EMPTY_VALUE = "^;";
-//     private static final String VALID_INT = "^(-?)(\\d)+$"; //TODO change this!
-//     private static final String VALID_DOUBLE = "^(-?)([0-9]+)(\\.[0-9]+)*$";
-//     private static final String VALID_CHAR = "^'.'$";
-//     private static final String VALID_STRING = "^\".*\"$";
-//     private static final String VALID_BOOLEAN = "^true$|^false$|^\\d+\\.?\\d*$";
      private static final String STRING_TYPE = "String";
      private static final String INT_TYPE = "int";
      private static final String CHAR_TYPE = "char";
@@ -40,10 +40,13 @@ public class Variable
 
 
 
-     public Variable(boolean dontCheckValue, String givenString) throws invalidSyntax {
+     public Variable (boolean dontCheckValue, String givenString,BasicBlock block) throws invalidSyntax {
          Pattern getGroups = Pattern.compile(VARIABLE_COMPONENTS);
          Matcher getGroupsMatcher = getGroups.matcher(givenString);
          boolean search = getGroupsMatcher.find();
+         if (search == false){
+             throw new invalidSyntax();
+         }
          if (getGroupsMatcher.group(GROUP_FINAL) != null){
              if (getGroupsMatcher.group(GROUP_EQUAL) == null){
                  throw new invalidSyntax();
@@ -54,7 +57,29 @@ public class Variable
          name = nameCheck(getGroupsMatcher.group(GROUP_NAME));
          //if there is an equal sign
          if (getGroupsMatcher.group(GROUP_EQUAL) != null && !dontCheckValue){
-            valueCheck(getGroupsMatcher.group(GROUP_VALUE), type);
+             String value = getGroupsMatcher.group(GROUP_VALUE);
+            boolean valueValidity = valueCheck(value, type);
+             if (valueValidity){
+                 initialized = true;
+             } else {
+                 ArrayList<Variable> possibleVars = ComponentsParser.findVariable(value.substring(0, value
+                         .length() - 1), block);
+                 if (!possibleVars.isEmpty()){
+                     for (Variable var : possibleVars){
+                         if (VariableFactory.possiblePairs(type,var.type)){
+                             if (var.initialized == true){
+                                 return;
+                             }
+                         }
+                         }
+                     throw new invalidSyntax();
+                     }
+                 else {
+                     throw new invalidSyntax();
+                 }
+
+             }
+
          }
     }
 
@@ -69,36 +94,17 @@ public class Variable
          else return name;
      }
 
-     private void valueCheck(String givenString, String type) throws invalidSyntax {
+     private boolean valueCheck(String givenString, String type) throws invalidSyntax {
          String value = givenString;
          value = value.trim();
          emptyValueCheck(value, EMPTY_VALUE);
          value = value.substring(0,value.length()-1);
-        if (type.equals(INT_TYPE)){
-            VariableChecks.valueValidityCheck(value, VariableChecks.VALID_INT);
-        }
-         else if (type.equals(DOUBLE_TYPE)){
-            VariableChecks.valueValidityCheck(value, VariableChecks.VALID_DOUBLE);
-        }
-         else if (type.equals(CHAR_TYPE)){
-            VariableChecks.valueValidityCheck(value, VariableChecks.VALID_CHAR);
-        }
-         else if (type.equals(STRING_TYPE)){
-            VariableChecks.valueValidityCheck(value, VariableChecks.VALID_STRING);
-        }
-         else if (type.equals(BOOLEAN)){
-            VariableChecks.valueValidityCheck(value, VariableChecks.VALID_BOOLEAN);
-        }
+         boolean valueCheck = VariableChecks.valueValidityCheck(value,type);
+         if (valueCheck == false){
+             return false;
+         }
+         return true;
      }
-
-//     private void valueValidityCheck(String givenString, String validValue) throws invalidSyntax {
-//         Pattern valueCheck = Pattern.compile(validValue);
-//         Matcher valueCheackMatcher = valueCheck.matcher(givenString);
-//         boolean search = valueCheackMatcher.find();
-//         if (!search) {
-//             throw new invalidSyntax();
-//         }
-//     }
 
      private void emptyValueCheck(String givenString,String emptyValueRegex) throws invalidSyntax {
          Pattern valueCheck = Pattern.compile(emptyValueRegex);

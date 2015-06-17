@@ -1,10 +1,8 @@
-package ex6.method;
+package oop.ex6.blocks;
 
-import ex6.exceptions.invalidSyntax;
-import ex6.variable.Variable;
-import ex6.variable.VariableFactory;
+import oop.ex6.exceptions.invalidSyntax;
+import oop.ex6.variable.Variable;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,22 +15,28 @@ public class MethodChecks {
     private static final String EMPTY_PARAMETER = "^\\s*$";
 
 
-    public static ArrayList<Variable> methodParamValidityCheck(String givenString) throws invalidSyntax {
-        ArrayList<Variable> varList = new ArrayList<>();
-
-        String name = givenString.substring(1,givenString.length()-1);
+    public static Method methodParamValidityCheck(String givenString, Method method, BasicBlock block) throws
+            invalidSyntax {
+//        ArrayList<Variable> varList = new ArrayList<>();
         Pattern empty = Pattern.compile(EMPTY_PARAMETER);
-        Matcher emptyParam = empty.matcher(name);
+        Matcher emptyParam = empty.matcher(givenString);
         boolean search = emptyParam.find();
         if (search){
-            return varList;
+            return method;
         }
-        String [] params = valueTranslator(name);
+        String [] params = valueTranslator(givenString);
         for (String value: params){
-            Variable var = new Variable(true,value+END_LINE);
-            varList.add(var);
+            Variable var = new Variable(true,value+END_LINE,block);
+            for (Variable existsParam : method.initialParam){
+                if (existsParam.name.equals(var.name)){
+                    throw new invalidSyntax(); //TODO: ugly code :)
+                }
+            }
+            method.initialParam.add(var);
+            var.initialized = true;
+            method.variables.put(var.name,var);
         }
-        return varList;
+        return method;
         }
 
     private static String[] valueTranslator(String givenString) throws invalidSyntax {//TODO code repetition?? with factory

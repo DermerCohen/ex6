@@ -1,4 +1,4 @@
-package ex6.variable;
+package oop.ex6.variable;
 
 /**
  * Created by dermersean on 15/06/2015.

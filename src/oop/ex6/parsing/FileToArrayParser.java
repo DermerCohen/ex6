@@ -1,4 +1,4 @@
-package ex6.parsing;
+package oop.ex6.parsing;
 
 import java.io.File;
 import java.io.FileNotFoundException;

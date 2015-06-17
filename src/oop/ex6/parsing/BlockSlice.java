@@ -1,4 +1,4 @@
-package ex6.parsing;
+package oop.ex6.parsing;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -16,7 +16,7 @@ public class BlockSlice {
     private static final String ENDS_WITH_BRACKET = "\\{\\s*$";
     private static final String CLOSING_BRACKET = "^\\s*}\\s*$";
 
-    public int findMethodEnd(ArrayList<String> lineArray, int startIndex){
+    public int findBlockEnd(ArrayList<String> lineArray, int startIndex){
         linesCounter = startIndex;
         Pattern openBracketPattern = Pattern.compile(ENDS_WITH_BRACKET);
         Pattern closingBracketPattern = Pattern.compile(CLOSING_BRACKET);
