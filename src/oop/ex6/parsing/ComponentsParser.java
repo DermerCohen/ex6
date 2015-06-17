@@ -236,9 +236,9 @@ public class ComponentsParser {
                    String type = block.variables.get(givenString).type;
                    if (VariableFactory.possiblePairs(type,givenType)) {
                        return true;
+                   }else {
+                       curBlock = curBlock.parent;
                    }
-               } else {
-                   curBlock = curBlock.parent;
                }
             }
             return false;
