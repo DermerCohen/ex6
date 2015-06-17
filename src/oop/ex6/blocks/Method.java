@@ -3,16 +3,21 @@ package oop.ex6.blocks;
 import java.util.ArrayList;
 
 /**
- * Created by amircohen on 6/14/15.
+ *this class represent block from type method
  */
 public class Method
 extends BasicBlock
 {
-//    ArrayList<Variable> variables = new ArrayList<>();
     public int start;
     public int end;
+    private static final String METHOD_TYPE = "method";
 
-
+    /**
+     * construct a new block that represent a method
+     * @param startIndex the line that the method start from
+     * @param endIndex the line that the method end
+     * @param givenParent the scope that the method is inside him
+     */
     public Method (int startIndex, int endIndex, MainBlock givenParent){
         start = startIndex;
         end = endIndex;
