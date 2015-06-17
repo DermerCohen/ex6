@@ -6,7 +6,7 @@ import java.util.Hashtable;
 import java.util.Set;
 
 import oop.ex6.blocks.MainBlock;
-import oop.ex6.exceptions.invalidSyntax;
+import oop.ex6.exceptions.CodeException;
 import oop.ex6.blocks.Method;
 import oop.ex6.parsing.*;
 import oop.ex6.variable.Variable;
@@ -27,7 +27,7 @@ public class Sjavac {
     static final int LEGAL_CODE = 0;
 
 
-    public static void main(String[] args) throws IOException, invalidSyntax {
+    public static void main(String[] args) throws IOException, CodeException {
             try {
                 ArrayList<String> lines = FileToArrayParser.convertFileToArray(args[FILE_INDEX]);
                 MainBlock mainBlock = ComponentsParser.createExpressions(lines);
@@ -36,18 +36,15 @@ public class Sjavac {
                     Method curMethod = mainBlock.methods.get(methodKey);
                     ComponentsParser.blockParser(mainBlock, curMethod, lines, curMethod.start, curMethod.end);
                 }
-            } catch (invalidSyntax e) {
+            } catch (CodeException e) {
                 System.out.println(ILLEGAL_CODE_EXCEPTION);
+                System.err.println(e.getMessage());
                 return;
-
             } catch (IOException e) {
                 System.out.println(IO_EXCEPTION);
                 return;
-
             }
             System.out.println(LEGAL_CODE);
-
-
         }
 
     private static Set<String> createIterationSet (Hashtable<String,Method> methods){

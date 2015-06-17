@@ -1,6 +1,6 @@
 package oop.ex6.variable;
 
-import oop.ex6.exceptions.invalidSyntax;
+import oop.ex6.exceptions.CodeException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +18,7 @@ public class VariableChecks {
 
 
 
-    public static boolean valueValidityCheck(String givenString, String givenType) throws invalidSyntax {
+    public static boolean valueValidityCheck(String givenString, String givenType) throws CodeException {
         givenString = givenString.trim();
         String suitableRegex = chooseRegex(givenType);
         Pattern valueCheck = Pattern.compile(suitableRegex);

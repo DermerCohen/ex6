@@ -28,7 +28,7 @@ public class VariableFactory {
 
 
     public static Hashtable<String,Variable> createVariables (String givenString,BasicBlock block) throws
-            invalidSyntax{
+            CodeException {
         Hashtable<String,Variable> finalTable = block.variables;
         Pattern convertString = Pattern.compile(COMPONENTS);
         Matcher convertStringMatcher = convertString.matcher(givenString);
@@ -55,7 +55,7 @@ public class VariableFactory {
             Variable newVariable = new Variable(consValueCheck, toTheConstructor,block);
             boolean checking = finalTable.containsKey(newVariable.name);
             if (finalTable.containsKey(newVariable.name)){
-                throw new invalidSyntax();
+                throw new CodeException(CodeException.MULTIPLE_VAR_NAMES);
             }
             else {
                 finalTable.put(newVariable.name, newVariable);
@@ -65,21 +65,21 @@ public class VariableFactory {
     }
 
 
-    public static String[] valueTranslator(String givenString) throws invalidSyntax {
+    public static String[] valueTranslator(String givenString) throws CodeException {
         // look for commas in the edges
         String toCheck = givenString.trim();
         Pattern commasCheck = Pattern.compile(COMMAS_EDGES);
         Matcher commasChecksMatcher = commasCheck.matcher(toCheck);
         boolean commasSearch = commasChecksMatcher.find();
         if (commasSearch) {
-            throw new invalidSyntax();
+            throw new CodeException(CodeException.UNSUPPORTED_LINE);
         }
         String[] variables = toCheck.split(",");
         return variables;
     }
 
     public static boolean existanceChecker(String type, String value, Hashtable<String,Variable>
-            tableOFVariables, String name) throws invalidSyntax {
+            tableOFVariables, String name) throws CodeException {
             value = value.trim();
             type = type.trim();
             name = name.trim();
@@ -88,13 +88,13 @@ public class VariableFactory {
                 if (possiblePairs(type, existType)) {
                     return DONT_CHECK_VALUE;
                 } else {
-                    throw new invalidSyntax();
+                    throw new CodeException(CodeException.MULTIPLE_VAR_NAMES);
                 }
             }
             return !DONT_CHECK_VALUE;
     }
 
-    public static boolean possiblePairs (String firstType, String secondType) throws invalidSyntax {
+    public static boolean possiblePairs (String firstType, String secondType) throws CodeException {
         if (firstType.equals("boolean")){
             if (secondType.equals("String")||secondType.equals("char")){
                 return false;

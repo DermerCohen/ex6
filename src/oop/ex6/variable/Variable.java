@@ -40,16 +40,16 @@ public class Variable
 
 
 
-     public Variable (boolean dontCheckValue, String givenString,BasicBlock block) throws invalidSyntax {
+     public Variable (boolean dontCheckValue, String givenString,BasicBlock block) throws CodeException {
          Pattern getGroups = Pattern.compile(VARIABLE_COMPONENTS);
          Matcher getGroupsMatcher = getGroups.matcher(givenString);
          boolean search = getGroupsMatcher.find();
          if (search == false){
-             throw new invalidSyntax();
+             throw new CodeException(CodeException.INVALID_VARIABLE_DECLARE);
          }
          if (getGroupsMatcher.group(GROUP_FINAL) != null){
              if (getGroupsMatcher.group(GROUP_EQUAL) == null){
-                 throw new invalidSyntax();
+                 throw new CodeException(CodeException.INVALID_VARIABLE_DECLARE);
              }
              isFinal = true;
          }
@@ -72,10 +72,10 @@ public class Variable
                              }
                          }
                          }
-                     throw new invalidSyntax();
+                     throw new CodeException(CodeException.INVALID_VARIABLE_DECLARE);
                      }
                  else {
-                     throw new invalidSyntax();
+                     throw new CodeException(CodeException.INVALID_VARIABLE_DECLARE);
                  }
 
              }
@@ -84,17 +84,17 @@ public class Variable
     }
 
 
-     private String nameCheck (String givenString) throws invalidSyntax {
+     private String nameCheck (String givenString) throws CodeException {
         String name = givenString.trim();
          Pattern nameCheck = Pattern.compile(INVALID_NAME);
          Matcher nameCheckMatcher = nameCheck.matcher(name);
          if (nameCheckMatcher.find()) {
-             throw new invalidSyntax();
+             throw new CodeException(CodeException.INVALID_VARIABLE_DECLARE);
          }
          else return name;
      }
 
-     private boolean valueCheck(String givenString, String type) throws invalidSyntax {
+     private boolean valueCheck(String givenString, String type) throws CodeException {
          String value = givenString;
          value = value.trim();
          emptyValueCheck(value, EMPTY_VALUE);
@@ -106,12 +106,12 @@ public class Variable
          return true;
      }
 
-     private void emptyValueCheck(String givenString,String emptyValueRegex) throws invalidSyntax {
+     private void emptyValueCheck(String givenString,String emptyValueRegex) throws CodeException {
          Pattern valueCheck = Pattern.compile(emptyValueRegex);
          Matcher valueCheackMatcher = valueCheck.matcher(givenString);
          boolean search = valueCheackMatcher.find();
          if (search){
-             throw new invalidSyntax();
+             throw new CodeException(CodeException.INVALID_VARIABLE_DECLARE);
          }
      }
 

@@ -1,6 +1,6 @@
 package oop.ex6.blocks;
 
-import oop.ex6.exceptions.invalidSyntax;
+import oop.ex6.exceptions.CodeException;
 import oop.ex6.variable.Variable;
 
 import java.util.regex.Matcher;
@@ -16,8 +16,7 @@ public class MethodChecks {
 
 
     public static Method methodParamValidityCheck(String givenString, Method method, BasicBlock block) throws
-            invalidSyntax {
-//        ArrayList<Variable> varList = new ArrayList<>();
+            CodeException {
         Pattern empty = Pattern.compile(EMPTY_PARAMETER);
         Matcher emptyParam = empty.matcher(givenString);
         boolean search = emptyParam.find();
@@ -29,7 +28,7 @@ public class MethodChecks {
             Variable var = new Variable(true,value+END_LINE,block);
             for (Variable existsParam : method.initialParam){
                 if (existsParam.name.equals(var.name)){
-                    throw new invalidSyntax(); //TODO: ugly code :)
+                    throw new CodeException(CodeException.MULTIPLE_PARAMETES_NAME);
                 }
             }
             method.initialParam.add(var);
@@ -39,14 +38,14 @@ public class MethodChecks {
         return method;
         }
 
-    private static String[] valueTranslator(String givenString) throws invalidSyntax {//TODO code repetition?? with factory
+    private static String[] valueTranslator(String givenString) throws CodeException {//TODO code repetition?? with factory
         // look for commas in the edges
         String toCheck = givenString.trim();
         Pattern commasCheck = Pattern.compile(COMMAS_EDGES);
         Matcher commasChecksMatcher = commasCheck.matcher(toCheck);
         boolean commasSearch = commasChecksMatcher.find();
         if (commasSearch) {
-            throw new invalidSyntax();
+            throw new CodeException(CodeException.INVALID_PARAMS_DECLARE);
         }
         String[] variables = givenString.split(",");
         return variables;

@@ -1,7 +1,8 @@
 package oop.ex6.parsing;
 
+import com.sun.org.apache.bcel.internal.classfile.Code;
 import oop.ex6.blocks.*;
-import oop.ex6.exceptions.invalidSyntax;
+import oop.ex6.exceptions.CodeException;
 import oop.ex6.blocks.Method;
 import oop.ex6.blocks.MethodChecks;
 import oop.ex6.variable.Variable;
@@ -64,7 +65,7 @@ public class ComponentsParser {
 
 
 
-    public static MainBlock createExpressions (ArrayList<String> lines) throws invalidSyntax {
+    public static MainBlock createExpressions (ArrayList<String> lines) throws CodeException {
         int lineCounter = 0;
         MainBlock mainBlock = new MainBlock();
 //        VariableChecks varChecker = new VariableChecks();
@@ -91,11 +92,11 @@ public class ComponentsParser {
                 if (!mainBlock.methods.containsKey(methodName)) {
                     int endOfMethod = slicer.findBlockEnd(lines, lineCounter - 1);
                     if (endOfMethod == UNBALANCED_CODE){
-                        throw new invalidSyntax();
+                        throw new CodeException(CodeException.MISSING_BRACKETS);
                     }
                     Method newMethod = new Method(lineCounter-1,endOfMethod,mainBlock);
                     String inputParam = methodBeginMatcher.group(METHOD_PARAM);
-                    newMethod = methodChecker.methodParamValidityCheck(inputParam,newMethod,mainBlock);//TODO
+                    newMethod = methodChecker.methodParamValidityCheck(inputParam,newMethod,mainBlock);
                     lineCounter = endOfMethod;
                     lineCounter++;
                     mainBlock.methods.put(methodName,newMethod);
@@ -105,19 +106,19 @@ public class ComponentsParser {
                 varModeChecker(mainBlock, varChecker, varModMatcher);
             }
             else {
-                throw new invalidSyntax();
+                throw new CodeException(CodeException.UNSUPPORTED_LINE);
             }
             }
         return mainBlock;
         }
 
     private static void varModeChecker(BasicBlock block, VariableChecks varChecker, Matcher varModMatcher)
-            throws invalidSyntax {
+            throws CodeException {
         String varName = varModMatcher.group(NAME_VAR_MODE);
         String value = varModMatcher.group(VALUE_VAR_MODE);
         ArrayList<Variable> foundFirstVariables = findVariable(varName, block);
         if (foundFirstVariables.isEmpty()) {
-            throw new invalidSyntax();
+            throw new CodeException(CodeException.VAR_MOD_FIRST_NOT_FOUND);
         } else {
             ArrayList<Variable> foundSecondVariables = findVariable(value, block);
             if (!(foundSecondVariables.isEmpty())) {
@@ -144,14 +145,14 @@ public class ComponentsParser {
                     }
                 }
             }
-            throw new invalidSyntax();
+            throw new CodeException(CodeException.ILLEGAL_VAR_MOD);
         }
     }
 
 
     public static void blockParser(MainBlock mainBlock, BasicBlock block, ArrayList<String> lines, int
             start, int end) throws
-            invalidSyntax {
+            CodeException {
         boolean foundReturn = false;
         int innerLineCounter = start + 1;
         if (block.type != null && block.type.equals(METHOD)) {
@@ -186,11 +187,11 @@ public class ComponentsParser {
                                 for (Variable possibleVar : possibleExistingVars){
                                     boolean findVar = VariableFactory.possiblePairs(possibleVar.type,BOOLEAN);
                                     if (findVar == false || possibleVar.initialized == false){
-                                        throw new invalidSyntax();
+                                        throw new CodeException(CodeException.INVALID_PARAMS_DECLARE);
                                     }
                                 }
                             } else {
-                                throw new invalidSyntax();
+                                throw new CodeException(CodeException.INVALID_PARAMS_DECLARE);
                             }
                         }
                     }
@@ -210,7 +211,7 @@ public class ComponentsParser {
                 continue;
 
             } else {
-                throw new invalidSyntax();
+                throw new CodeException(CodeException.UNSUPPORTED_LINE);
             }
             innerLineCounter++;
         }
@@ -230,7 +231,7 @@ public class ComponentsParser {
 
 
         private static boolean searchVariable (String givenString, BasicBlock block, String givenType) throws
-                invalidSyntax{
+                CodeException {
             BasicBlock curBlock = block;
             givenString = givenString.trim();
             while (curBlock != null) {
@@ -251,7 +252,7 @@ public class ComponentsParser {
     }
 
     private static void legalMethodCall(MainBlock mainBlock, String methodName, String parametersUsage,
-                                        BasicBlock curBlock) throws invalidSyntax {
+                                        BasicBlock curBlock) throws CodeException {
         methodName = methodName.trim();
         if (mainBlock.methods.containsKey(methodName)){
             Method foundMethod = mainBlock.methods.get(methodName);
@@ -260,7 +261,7 @@ public class ComponentsParser {
             }
             String[] paramUsage = VariableFactory.valueTranslator(parametersUsage);
             if (foundMethod.initialParam.size() != paramUsage.length){
-                throw new invalidSyntax();
+                throw new CodeException(CodeException.METHOD_CALL_WRONG_PARAMS_NUM);
             } else {
                 for (int i=0; i< foundMethod.initialParam.size(); i++){
                     String curParam = paramUsage[i];
@@ -274,7 +275,7 @@ public class ComponentsParser {
                                  if (pairCheck){
                                      break;
                                  } else {
-                                     throw new invalidSyntax();
+                                     throw new CodeException(CodeException.INVALID_PARAMS_DECLARE);
                                  }
                              }
                         }
@@ -282,7 +283,7 @@ public class ComponentsParser {
                         boolean newParamCheck = VariableChecks.valueValidityCheck(curParam,foundMethod
                                 .initialParam.get(i).type);
                         if (newParamCheck == false) {
-                            throw new invalidSyntax();
+                            throw new CodeException(CodeException.INVALID_PARAMS_DECLARE);
                         }
                     }
                 }
@@ -291,7 +292,7 @@ public class ComponentsParser {
     }
 
     private static void returnCheck (ArrayList<String> lines, int beginIndex, int endIndex) throws
-            invalidSyntax {
+            CodeException {
         boolean foundReturn = false;
         int lineCounter = endIndex-1;
         while (lineCounter > beginIndex){
@@ -305,7 +306,7 @@ public class ComponentsParser {
             } else if (searchReturnLine){
                 return;
             } else {
-                throw new invalidSyntax();
+                throw new CodeException(CodeException.METHOD_RETURN_MISSING);
             }
         }
     }
