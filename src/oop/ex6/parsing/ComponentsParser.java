@@ -235,7 +235,7 @@ public class ComponentsParser {
             givenString = givenString.trim();
             while (curBlock != null) {
                if ( curBlock.variables.containsKey(givenString)){
-                   Variable foundVar = block.variables.get(givenString);
+                   Variable foundVar = curBlock.variables.get(givenString);
                    String type = foundVar.type;
                    if (VariableFactory.possiblePairs(type,givenType)) {
                        if (foundVar.initialized == true){
