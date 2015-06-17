@@ -196,7 +196,7 @@ public class ComponentsParser {
             returnCheck(lines, start, end);
         }
         while (innerLineCounter < end) {
-            String curLine = lines.get(innerLineCounter);//TODO: count lines
+            String curLine = lines.get(innerLineCounter);
             Matcher commentMatcher = commentPattern.matcher(curLine);
             Matcher emptyLineMatcher = emptyLinePattern.matcher(curLine);
             Matcher variableMatcher = variablePattern.matcher(curLine);

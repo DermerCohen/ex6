@@ -61,7 +61,7 @@ public class MethodChecks {
      * @return String [] after slicing
      * @throws CodeException
      */
-    private static String[] valueTranslator(String givenString) throws CodeException {//TODO code repetition?? with factory
+    private static String[] valueTranslator(String givenString) throws CodeException {
         // look for commas in the edges
         String toCheck = givenString.trim();
         Pattern commasCheck = Pattern.compile(COMMAS_EDGES);
@@ -74,4 +74,5 @@ public class MethodChecks {
         String[] variables = givenString.split(",");
         return variables;
     }
+
 }

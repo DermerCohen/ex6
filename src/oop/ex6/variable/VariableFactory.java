@@ -37,6 +37,7 @@ public class VariableFactory {
         Hashtable<String,Variable> finalTable = block.variables;
         Pattern convertString = Pattern.compile(COMPONENTS);
         Matcher convertStringMatcher = convertString.matcher(givenString);
+        convertStringMatcher.find();
         String finalValue = convertStringMatcher.group(GROUP_FINAL);
         //the variable is not final
         if (finalValue == null){
