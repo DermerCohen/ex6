@@ -189,6 +189,8 @@ public class ComponentsParser {
                                         throw new invalidSyntax();
                                     }
                                 }
+                            } else {
+                                throw new invalidSyntax();
                             }
                         }
                     }
@@ -240,6 +242,7 @@ public class ComponentsParser {
                        curBlock = curBlock.parent;
                    }
                }
+                curBlock = curBlock.parent;
             }
             return false;
     }
