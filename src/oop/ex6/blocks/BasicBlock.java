@@ -3,7 +3,6 @@ package oop.ex6.blocks;
 import oop.ex6.variable.Variable;
 import java.util.ArrayList;
 import java.util.Hashtable;
-
 /**
  * this class represent the basic block. block represent a single scope.
  *

@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 import oop.ex6.blocks.BasicBlock;
 import oop.ex6.exceptions.*;
-import oop.ex6.parsing.ComponentsParser;
+import oop.ex6.parsing.*;
 
 /**
  *

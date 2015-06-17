@@ -7,13 +7,18 @@ import java.util.Scanner;
 
 /**
  * This class is responsible for the initial parsing of the file the program tries to test.
- * Created by amircohen on 6/14/15.
+ *
  */
 public class FileToArrayParser {
 
+    /**
+     * This method gets an array
+     * @param fileDirectory
+     * @return
+     * @throws FileNotFoundException
+     */
     public static ArrayList<String> convertFileToArray(String fileDirectory) throws FileNotFoundException
-    {//TODO:
-    // handle this exception
+    {
         ArrayList<String> linesArray = new ArrayList<String>();
         File myFile = new File(fileDirectory);
         Scanner scanner = new Scanner(myFile);
