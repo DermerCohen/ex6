@@ -3,11 +3,8 @@ package oop.ex6.blocks;
 import java.util.Hashtable;
 
 /**
- * Created by dermersean on 15/06/2015.
+ * this class represent a block from type main (the main scope)
  */
-public class MainBlock extends BasicBlock
-
-{
-//    public Hashtable<String,Variable> variables = new Hashtable<String,Variable>();
+public class MainBlock extends BasicBlock {
     public Hashtable<String,Method> methods = new Hashtable<>();
 }

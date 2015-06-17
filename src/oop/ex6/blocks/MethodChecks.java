@@ -2,12 +2,11 @@ package oop.ex6.blocks;
 
 import oop.ex6.exceptions.invalidSyntax;
 import oop.ex6.variable.Variable;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by dermersean on 15/06/2015.
+ *
  */
 public class MethodChecks {
     private static final String COMMAS_EDGES = "^,|,$";//TODO code repetition?? with factory
