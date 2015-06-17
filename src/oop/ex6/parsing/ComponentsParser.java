@@ -81,12 +81,10 @@ public class ComponentsParser {
             if (commentMatcher.find() || emptyLineMatcher.find()){
                 continue;
             }
-
             else if (variableMatcher.find()){
                 mainBlock.variables =
                         VariableFactory.createVariables(curLine,mainBlock);
             }
-
             else if (methodBeginMatcher.find()) {
                 String methodName = methodBeginMatcher.group(METHOD_NAME);
                 if (!mainBlock.methods.containsKey(methodName)) {
